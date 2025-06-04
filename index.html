@@ -37,6 +37,45 @@
         }
         return gk_fileData[filename] || "";
         }
+        </script><script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
         </script><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -93,20 +132,25 @@
             margin: 1rem 0;
             color: #a0a0ff;
         }
-        .toggle-btn {
+        .top-buttons {
             position: fixed;
             top: 20px;
             right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        .login-btn, .toggle-btn {
             padding: 10px 20px;
             background: linear-gradient(90deg, #ff6f61, #d83f87);
             color: white;
+            text-decoration: none;
             border: none;
             border-radius: 25px;
             cursor: pointer;
-            z-index: 10;
             transition: transform 0.3s;
         }
-        .toggle-btn:hover {
+        .login-btn:hover, .toggle-btn:hover {
             transform: scale(1.05);
         }
         .section {
@@ -163,7 +207,7 @@
             flex-wrap: wrap;
             gap: 1.5rem;
             max-width: 800px;
-            margin:  Ascending;
+            margin: 0 auto;
         }
         .input-group {
             position: relative;
@@ -226,7 +270,10 @@
             <h1>Bhavin's Portfolio</h1>
             <p class="typing-text"></p>
         </div>
-        <button class="toggle-btn" onclick="toggleDarkMode()">Dark Mode</button>
+        <div class="top-buttons">
+            <a href="http://192.168.223.71/" class="login-btn" target="_blank">Login</a>
+            <button class="toggle-btn" onclick="toggleDarkMode()">Dark Mode</button>
+        </div>
     </section>
     <div class="section">
         <div class="glass-card">
