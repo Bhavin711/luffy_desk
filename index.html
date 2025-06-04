@@ -42,80 +42,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Login</title>
+    <title>Bhavin's Portfolio</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #2e2e4f);
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f0f1a, #1a1a2f);
+        }
+        .hero {
+            height: 100vh;
+            position: relative;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-        }
-        .login-container {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .login-container h2 {
-            margin-bottom: 1rem;
             text-align: center;
-        }
-        .login-container input {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .login-container button {
-            width: 100%;
-            padding: 0.5rem;
-            background-color: #007bff;
             color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            overflow: hidden;
         }
-        .login-container button:hover {
-            background-color: #0056b3;
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        .hero-content {
+            z-index: 1;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            background: linear-gradient(90deg, #ff6f61, #d83f87);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeIn 2s ease-in-out;
+        }
+        .typing-text {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            color: #a0a0ff;
+        }
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #ff6f61, #d83f87);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.3s;
+        }
+        .toggle-btn:hover {
+            transform: scale(1.05);
+        }
+        .section {
+            padding: 5rem 2rem;
+            position: relative;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 1rem 0;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+        .projects-grid, .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .project-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .project-card:hover img {
+            transform: scale(1.05);
+        }
+        .project-card h3, .skill-card h3 {
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, #ff6f61, #d83f87);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .skill-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .skill-card img {
+            width: 40px;
+            height: 40px;
+        }
+        .contact-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            max-width: 800px;
+            margin:  Ascending;
+        }
+        .input-group {
+            position: relative;
+            flex: 1 1 300px;
+        }
+        .input-group img {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        .input-group input:focus, .input-group textarea:focus {
+            background: rgba(255, 255, 255, 0.25);
+            outline: none;
+        }
+        .input-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .contact-form button {
+            padding: 12px 30px;
+            background: linear-gradient(90deg, #ff6f61, #d83f87);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .contact-form button:hover {
+            transform: scale(1.05);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .typing-text { font-size: 1.2rem; }
+            .projects-grid, .skills-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button onclick="login()">Login</button>
+    <section class="hero">
+        <div id="particles-js"></div>
+        <div class="hero-content">
+            <h1>Bhavin's Portfolio</h1>
+            <p class="typing-text"></p>
+        </div>
+        <button class="toggle-btn" onclick="toggleDarkMode()">Dark Mode</button>
+    </section>
+    <div class="section">
+        <div class="glass-card">
+            <h2>About Me</h2>
+            <p>I'm Bhavin, a passionate Web Developer and Creative Designer. I specialize in crafting visually stunning and highly functional websites that leave a lasting impression.</p>
+        </div>
     </div>
-
+    <div class="section">
+        <div class="glass-card">
+            <h2>My Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card glass-card">
+                    <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490" alt="Web Development Project">
+                    <h3>Web Development</h3>
+                    <p>A responsive website built with HTML, CSS, and JS.</p>
+                </div>
+                <div class="project-card glass-card">
+                    <img src="https://images.unsplash.com/photo-1551650975-87deedd962.html" alt="App Development Project">
+                    <h3>App Development</h3>
+                    <p>A mobile app designed with React Native.</p>
+                </div>
+                <div class="project-card glass-card">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Design Project">
+                    <h3>Creative Design</h3>
+                    <p>A branding mockup created in Adobe XD.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="glass-card">
+            <h2>My Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card glass-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/732/732212.png" alt="HTML Icon">
+                    <h3>HTML</h3>
+                    <p>90%</p>
+                </div>
+                <div class="skill-card glass-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/732/732190.png" alt="CSS Icon">
+                    <h3>CSS</h3>
+                    <p>85%</p>
+                </div>
+                <div class="skill-card glass-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968292.png" alt="JavaScript Icon">
+                    <h3>JavaScript</h3>
+                    <p>80%</p>
+                </div>
+                <div class="skill-card glass-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/919/919851.png" alt="React Icon">
+                    <h3>React</h3>
+                    <p>75%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="glass-card">
+            <h2>Contact Me</h2>
+            <div class="contact-form">
+                <div class="input-group">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="User Icon">
+                    <input type="text" placeholder="Your Name">
+                </div>
+                <div class="input-group">
+                    <img src="https://cdn-icons-png.flaticon.com/512/561/5611448.png" alt="Email Icon">
+                    <input type="email" placeholder="Your Email">
+                </div>
+                <div class="input-group" style="flex: 1 1 100%;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/561/5611450.png" alt="Message Icon">
+                    <textarea placeholder="Your Message" rows="5"></textarea>
+                </div>
+                <button>Send Message</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js"></script>
     <script>
-        async function login() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            try {
-                const response = await fetch('/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    localStorage.setItem('token', data.token);
-                    window.location.href = '/folder-management.html';
-                } else {
-                    alert('Invalid credentials');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Login failed');
+        // Particle.js configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ff6f61' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#d83f87', opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', random: false }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
+                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
             }
+        });
+
+        // Typing effect
+        new Typed('.typing-text', {
+            strings: ['Web Developer', 'Creative Designer', 'Tech Enthusiast'],
+            typeSpeed: 50,
+            backSpeed: 30,
+            loop: true
+        });
+
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
         }
     </script>
 </body>
